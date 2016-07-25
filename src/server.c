@@ -10,7 +10,7 @@
 #include <pthread.h>
 
 #define SERVER_IP   "127.0.0.1"     // IP сервера
-#define SERVER_PORT 3141            // Порт сервера
+#define SERVER_PORT 3144            // Порт сервера
 #define MAX_MSGLEN  64
 #define MAX_CLT     100             // Число клиентов, обрабатываемое одним
                                     // потоком
@@ -63,6 +63,7 @@ void thread_clients(void *argv)
     cnt = 0;
     sock = *((int *)argv);
     addr_size = sizeof(struct sockaddr_in *);
+    events = malloc(sizeof(struct epoll_event) * MAX_CLT);
     if ((epfd = epoll_create(MAX_CLT)) == -1)
         error_completion(sock, "ERROR epoll_create");
     printf("Run thread. Listen socket: %d\n", sock);
@@ -103,7 +104,7 @@ void thread_clients(void *argv)
                 if (cnt > MAX_CLT){
                     pthread_t tid;
                     // Удаляем слушающий сокет из отслеживаемых в этом потоке
-                    if (epoll_ctl(epfd, EPOLL_CTL_DEL, sock_clt, NULL) == -1)
+                    if (epoll_ctl(epfd, EPOLL_CTL_DEL, sock, NULL) == -1)
                         error_completion(sock, "ERROR epoll_ctl delete");
                     if (pthread_create(&tid, 0, (void *)thread_clients, argv) 
                                         == -1)

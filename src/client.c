@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#define SRV_PORT    3141        // Порт сервера
+#define SRV_PORT    3144        // Порт сервера
 #define SRV_ADDR    "127.0.0.1" // IP адрес сервера
 #define MSG_MAXLEN  64          // Максимальная длина сообщения
 
